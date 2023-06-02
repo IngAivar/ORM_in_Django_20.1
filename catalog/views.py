@@ -1,19 +1,32 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
-from catalog.models import Product
+from catalog.models import Product, Post, Contact
 
 
 class ProductListView(ListView):
     model = Product
-
-
-def contacts(request):
-    context = {
-        'title': 'Контакты'
+    extra_context = {
+        'title': 'Главная'
     }
 
-    return render(request, 'catalog/contacts.html', context)
+
+class ProductDetailView(DetailView):
+    model = Product
+
+
+class PostListView(ListView):
+    model = Post
+    extra_context = {
+        'title': 'Посты'
+    }
+
+
+class ContactListView(ListView):
+    model = Contact
+    extra_context = {
+        'title': 'Контакты'
+    }
 
 # from catalog.models import Product
 #
