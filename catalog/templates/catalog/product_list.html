@@ -9,7 +9,7 @@
 
     <div class="container">
     <h1 class="text-dark">Список продуктов</h1>
-
+    <div class="container">
         {% for object in object_list %}
 
             <div class="row text-center">
@@ -20,7 +20,7 @@
                         </div>
                         {% if object.image %}
 
-                            <img src="{{ object.image.url }}" alt="img">
+                            <img src="{{ object.image | mediapath }}" alt="img">
                         {% endif %}
                         <div class="card-body">
                             <h1 class="card-title pricing-card-title">{{ object.purchase_price }} ₽</h1>
@@ -37,6 +37,7 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
         <div class="example1-pagination">
             {% if page_obj.has_previous %}
                 <a class="example1-pagination_link" href="?page=1">&laquo; первая</a>
