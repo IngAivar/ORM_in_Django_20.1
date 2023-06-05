@@ -1,0 +1,30 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+    {% load сustom_tags %}
+    <div class="container">
+        <h4 class="bg-info">Наименование: {{ object.product_name }}</h4>
+        <br>
+        <h4 class="bg-info">Описание: {{ object.description }}</h4>
+        <br>
+        <h4 class="bg-info">Категория: {{ object.category }}</h4>
+
+        <br>
+        <h4 class="bg-info">Цена: {{ object.purchase_price }} ₽</h4>
+
+        <br>
+        <h4 class="bg-info">Добавлено: {{ object.creation_date }}</h4>
+
+        <br>
+        <h4 class="bg-info">Обновлено: {{ object.last_modified_date }}</h4>
+
+        {% if product.image %}
+
+            <img src="{{ object.image | mediapath }}" alt="img">
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
+
+<!--{{ object.image.url }}-->

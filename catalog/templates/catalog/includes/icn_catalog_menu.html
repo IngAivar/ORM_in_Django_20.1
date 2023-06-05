@@ -1,7 +1,9 @@
 <div class="col-sm-4 offset-md-1 py-4">
     <h4 class="text-white">Меню</h4>
     <ul class="list-unstyled">
-        <li><a href="{% url 'catalog:home' %}" class="text-white">Главная</a></li>
-        <li><a href="{% url 'catalog:contacts' %}" class="text-white">Контакты</a></li>
+        <li><a href="{% url 'catalog:product_list' %}" class="text-white">Главная</a></li>
+        <li><a href="{% url 'catalog:contact_list' %}" class="text-white">Контакты</a></li>
+        <li><a href="{% url 'catalog:product_form' %}" class="text-white">Создать продукт</a></li>
+        <li><a href="{% url 'catalog:post_list' %}" class="text-white">Посты</a></li>
     </ul>
 </div>
