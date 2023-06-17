@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.db import models
 from transliterate import translit
 
@@ -33,6 +35,13 @@ class Product(models.Model):
         verbose_name = 'продукт'
         verbose_name_plural = 'продукты'
         ordering = ('product_name',)
+
+    def get_active_version(self) -> Optional['Version']:
+        """
+        Возвращает активную версию товара, если она существует.
+        Если активная версия не найдена, возвращает None
+        """
+        return self.version.filter(is_current_version=True).first()
 
 
 class Contact(models.Model):
