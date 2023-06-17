@@ -65,10 +65,27 @@ class Post(models.Model):
         self.is_published = False
         self.save()
 
-
     def __str__(self):
         return f'{self.title} | {self.content[:30]}'
 
     class Meta:
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
+
+
+class Version(models.Model):
+    """
+    Модель, описывающая версию товара.
+    """
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='version', verbose_name='Продукт')
+    version_number = models.CharField(max_length=100, verbose_name='Номер версии')
+    version_name = models.CharField(max_length=100, verbose_name='Название версии')
+    is_current_version = models.BooleanField(default=False, verbose_name='Текущая версия')
+
+    class Meta:
+        verbose_name = 'Версия'
+        verbose_name_plural = 'Версии'
+        db_table = 'versions'
+
+    def __str__(self):
+        return f"{self.version_number}: {self.version_name}"

@@ -1,8 +1,10 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from catalog.forms import PostForm, ContactForm
+from catalog.forms import PostForm, ContactForm, CreateProductForm
 from catalog.models import Product, Post, Contact
 
 
@@ -19,8 +21,21 @@ class ProductDetailView(DetailView):
 
 class ProductCreate(CreateView):
     model = Product
-    fields = ('product_name', 'description', 'image', 'purchase_price', 'category')
+    form_class = CreateProductForm
+    # fields = ('product_name', 'description', 'image', 'purchase_price', 'category')
     success_url = reverse_lazy('catalog:product_list')
+
+    # def form_valid(self, form: CreateProductForm) -> HttpResponseRedirect:
+    #     """
+    #     Обрабатывает форму, если она валидна,
+    #     сохраняет товар и перенаправляет на страницу деталей товара.
+    #     """
+    #     product = form.save(commit=False)
+    #     product.created_by = self.request.user
+    #     product.save()
+    #
+    #     messages.success(self.request, 'Товар успешно добавлен')
+    #     return HttpResponseRedirect(reverse('catalog:product_detail', args=[product.id]))
 
 
 class PostListView(ListView):
