@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 from user.managers import CustomUserManager
 
@@ -30,3 +31,33 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+    @classmethod
+    def get_user_by_id(cls, user_id: int) -> 'CustomUser':
+        """
+        Возвращает пользователя по его идентификатору.
+
+        :param user_id: Идентификатор пользователя.
+        :return: Объект пользователя с указанным идентификатором.
+        """
+        return cls.objects.get(id=user_id)
+
+    @classmethod
+    def get_user_by_email(cls, user_email: str) -> 'CustomUser':
+        """
+        Возвращает пользователя по его электронной почте.
+
+        :param user_email: Электронная почта пользователя.
+        :return: Объект пользователя с указанной электронной почтой.
+        """
+        return cls.objects.get(email=user_email)
+
+    def get_absolute_url(self) -> str:
+        """
+        Возвращает абсолютный URL профиля пользователя.
+
+        Используется в Django представлениях (например, в UpdateView)
+        для автоматического определения URL-адреса перенаправления
+        после успешного обновления экземпляра модели.
+        """
+        return reverse('app_user:profile', args=[str(self.id)])
