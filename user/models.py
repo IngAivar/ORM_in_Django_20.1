@@ -60,4 +60,4 @@ class CustomUser(AbstractUser):
         для автоматического определения URL-адреса перенаправления
         после успешного обновления экземпляра модели.
         """
-        return reverse('app_user:profile', args=[str(self.id)])
+        return reverse('user:profile', args=[str(self.id)])
