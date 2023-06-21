@@ -31,6 +31,6 @@ class CreatorAccessMixin:
         if not self.check_creator_access(obj=obj):
             message = 'У вас нет разрешения на редактирование и удаление этого объекта'
             messages.info(request=self.request, message=message)
-            return redirect(reverse('app_catalog:home'))
+            return redirect(reverse('catalog:base'))
 
         return super().dispatch(request, *args, **kwargs)

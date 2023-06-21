@@ -45,7 +45,7 @@ class EmailConfirmationService:
         current_site = get_current_site(request=request)
         mail_subject = 'Подтверждение регистрации'
         message = render_to_string(
-            template_name='app_user/confirmation_email.html',
+            template_name='user/confirmation_email.html',
             context={
                 'user': user,
                 'domain': current_site.domain,

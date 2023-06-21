@@ -34,7 +34,7 @@ class UserRegisterView(CreateView):
     """
     model = CustomUser
     form_class = UserRegistrationForm
-    success_url = reverse_lazy('app_catalog:home')
+    success_url = reverse_lazy('catalog:base')
 
     def form_valid(self, form: Form) -> HttpResponseRedirect:
         """
@@ -111,7 +111,7 @@ class EmailConfirmationView(View):
                         'Пожалуйста, проверьте вашу почту и следуйте инструкциям '
                         'для подтверждения электронной почты.'
             )
-            return redirect(to='app_catalog:home')
+            return redirect(to='catalog:base')
 
 
 class UserLoginView(LoginView):
@@ -143,7 +143,7 @@ class UserLoginView(LoginView):
                 message = 'Ваш email не подтвержден. ' \
                           'Пожалуйста, перейдите по ссылке, отправленной на вашу электронную почту!'
                 messages.error(self.request, message=message)
-                return redirect(to='app_catalog:home')
+                return redirect(to='catalog:base')
 
         except CustomUser.DoesNotExist:
             logger.debug(f'Пользователь с почтой {form.data.get("username")} не найден')

@@ -60,7 +60,7 @@ class ProductUpdateView(UpdateView):
             versions.instance = product
             versions.save()
             messages.success(self.request, 'Товар обновлён')
-            return HttpResponseRedirect(reverse('app_catalog:update_product', args=[product.id]))
+            return HttpResponseRedirect(reverse('catalog:update_product', args=[product.id]))
         else:
             error_message = versions.non_form_errors()
             messages.error(self.request, error_message)
