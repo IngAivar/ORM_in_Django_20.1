@@ -53,7 +53,7 @@ class CreateProductForm(ModelForm):
 
     class Meta:
         model = Product
-        fields = ('product_name', 'description', 'image', 'purchase_price', 'category')
+        fields = ('product_name', 'description', 'image', 'purchase_price', 'category', 'created_by')
 
 
 class VersionForm(forms.ModelForm):
