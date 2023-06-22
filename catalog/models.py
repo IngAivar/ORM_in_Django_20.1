@@ -3,6 +3,8 @@ from typing import Optional
 from django.db import models
 from transliterate import translit
 
+from user.models import CustomUser
+
 NULLABLE = {'blank': True, 'null': True}
 
 
@@ -27,6 +29,7 @@ class Product(models.Model):
     purchase_price = models.IntegerField(verbose_name='цена за покупку', **NULLABLE)
     creation_date = models.DateField(verbose_name='дата создания', **NULLABLE)
     last_modified_date = models.DateField(verbose_name='дата последнего изменения', **NULLABLE)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Кем создан', default=1)
 
     def __str__(self):
         return f'{self.product_name} \n {self.description} \n {self.purchase_price}$ \n'

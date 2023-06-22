@@ -27,7 +27,7 @@
 
                             <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                                 <li>- {{ object.description | short_description }}</li>
-
+                                <li>- {{ object.created_by }}</li>
                             </ul>
 
                             <a type="button" href="{% url 'catalog:product_detail' object.id %}"

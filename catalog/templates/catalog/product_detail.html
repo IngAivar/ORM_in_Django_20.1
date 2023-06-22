@@ -17,6 +17,9 @@
         <br>
         <h4 class="bg-info">Обновлено: {{ object.last_modified_date }}</h4>
 
+        <br>
+        <h4 class="bg-info">Создано пользователем: {{ object.created_by }}</h4>
+
         {% if product.image %}
 
             <img src="{{ object.image | mediapath }}" alt="img">
