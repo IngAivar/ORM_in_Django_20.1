@@ -8,6 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from catalog.forms import PostForm, ContactForm, CreateProductForm, ProductVersionFormSet
 from catalog.models import Product, Post, Contact
+from permissions.user_permission import CreatorAccessMixin
 
 
 class ProductListView(ListView):
@@ -40,7 +41,7 @@ class ProductCreate(CreateView):
     #     return HttpResponseRedirect(reverse('catalog:product_detail', args=[product.id]))
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(CreatorAccessMixin, UpdateView):
     """
     Представление для редактирования существующего товара.
     """
@@ -85,6 +86,24 @@ class ProductUpdateView(UpdateView):
         else:
             return ProductVersionFormSet(instance=self.object)
 
+
+class ProductDeleteView(CreatorAccessMixin, DeleteView):
+    """
+    Представление для удаления существующего товара.
+    """
+    model = Product
+    success_url = reverse_lazy('catalog:product_list')
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Удаляет товар и перенаправляет на страницу списка товаров.
+        """
+        self.object = self.get_object()
+
+        message = f'Товар "{self.object.title}" удалён'
+        messages.success(request, message)
+
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class PostListView(ListView):
