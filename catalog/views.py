@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
@@ -8,7 +9,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from catalog.forms import PostForm, ContactForm, CreateProductForm, ProductVersionFormSet
 from catalog.models import Product, Post, Contact
-from permissions.user_permission import CreatorAccessMixin
+from permissions.user_permission import CreatorAccessMixin, ModeratorAccessMixin, ModeratorOrCreatorMixin
 
 
 class ProductListView(ListView):
@@ -28,20 +29,29 @@ class ProductCreate(CreateView):
     # fields = ('product_name', 'description', 'image', 'purchase_price', 'category')
     success_url = reverse_lazy('catalog:product_list')
 
-    # def form_valid(self, form: CreateProductForm) -> HttpResponseRedirect:
-    #     """
-    #     Обрабатывает форму, если она валидна,
-    #     сохраняет товар и перенаправляет на страницу деталей товара.
-    #     """
-    #     product = form.save(commit=False)
-    #     product.created_by = self.request.user
-    #     product.save()
-    #
-    #     messages.success(self.request, 'Товар успешно добавлен')
-    #     return HttpResponseRedirect(reverse('catalog:product_detail', args=[product.id]))
+    def form_valid(self, form: CreateProductForm) -> HttpResponseRedirect:
+        """
+        Обрабатывает форму, если она валидна,
+        сохраняет товар и перенаправляет на страницу деталей товара.
+        """
+        product = form.save(commit=False)
+        product.created_by = self.request.user
+        product.save()
+
+        messages.success(self.request, 'Товар успешно добавлен')
+        return HttpResponseRedirect(reverse('catalog:product_detail', args=[product.id]))
+
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """
+        Получает и возвращает контекст данных для шаблона создания товара,
+        включая информацию о действии.
+        """
+        context = super().get_context_data(**kwargs)
+        context['action'] = 'Создать'
+        return context
 
 
-class ProductUpdateView(CreatorAccessMixin, UpdateView):
+class ProductUpdateView(ModeratorOrCreatorMixin, UpdateView):
     """
     Представление для редактирования существующего товара.
     """
@@ -104,6 +114,31 @@ class ProductDeleteView(CreatorAccessMixin, DeleteView):
         messages.success(request, message)
 
         return HttpResponseRedirect(self.get_success_url())
+
+
+class UnpublishedProductListView(ModeratorAccessMixin, ListView):
+    """
+    Представление для списка неопубликованных товаров.
+    Настроена пагинация.
+    На одной странице отображается 4 товара.
+    """
+    template_name = 'catalog/products.html'
+    context_object_name = 'products'
+    paginate_by = 4
+
+    def get_queryset(self) -> QuerySet[Product]:
+        """
+        Получает и возвращает queryset неопубликованных товаров.
+        """
+        return Product.get_unpublished_products()
+
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """
+        Получает и возвращает контекст данных для шаблона.
+        """
+        context = super().get_context_data(**kwargs)
+        context['header'] = 'Неопубликованные товары'
+        return context
 
 
 class PostListView(ListView):

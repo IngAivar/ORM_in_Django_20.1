@@ -30,6 +30,7 @@ class Product(models.Model):
     creation_date = models.DateField(verbose_name='дата создания', **NULLABLE)
     last_modified_date = models.DateField(verbose_name='дата последнего изменения', **NULLABLE)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Кем создан', default=1)
+    is_published = models.BooleanField(verbose_name='Опубликован', default=False)
 
     def __str__(self):
         return f'{self.product_name} \n {self.description} \n {self.purchase_price}$ \n'
@@ -45,6 +46,15 @@ class Product(models.Model):
         Если активная версия не найдена, возвращает None
         """
         return self.version.filter(is_current_version=True).first()
+
+    @classmethod
+    def get_unpublished_products(cls) -> models.QuerySet:
+        """
+        Возвращает все неопубликованные товары.
+
+        :return: QuerySet с неопубликованными товарами
+        """
+        return cls.objects.filter(is_published=False)
 
 
 class Contact(models.Model):

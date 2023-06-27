@@ -1,0 +1,23 @@
+{% load сustom_tags %}
+
+<div class="col-lg-3 col-sm-6 mb-3">
+    <div class="item-card">
+        <div class="item-thumb">
+            <img src="{{ object.image | mediapath }}">
+        </div>
+        <div class="item-details">
+            <h4><a href="{% url 'catalog:product_detail' object.id %}">{{ product.product_name }}</a></h4>
+            <p>{{ product.description|truncatechars:100 }}</p>
+            {% if product.get_active_version %}
+                <p>Активная версия: {{ product.get_active_version.version_number }}</p>
+            {% else %}
+                <p>Активная версия: не указана</p>
+            {% endif %}
+            <div class="item-bottom-details d-flex justify-content-between">
+                <div class="item-price">
+                    {{ product.purchase_price }} ₽
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

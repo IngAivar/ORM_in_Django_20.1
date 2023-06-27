@@ -32,6 +32,8 @@ class CreateProductForm(ModelForm):
         for field_name, field in self.fields.items():
             if field_name == 'image':
                 field.widget.attrs['class'] = 'form-control-file'
+            elif field_name != 'is_published':
+                field.widget.attrs['class'] = 'form-control'
 
         if 'product_name' in self.fields:
             self.fields['product_name'].widget.attrs['placeholder'] = 'Введите название товара'
@@ -111,3 +113,29 @@ ProductVersionFormSet = inlineformset_factory(
     formset=VersionFormSet,
     extra=1
 )
+
+
+class ProductCreatorForm(CreateProductForm):
+    """
+    Форма для создания или редактирования товара его создателем.
+
+    Создатель может изменять все поля, кроме статуса публикации (is_published).
+    Включает проверку на запрещенные слова в названии и описании.
+    """
+
+    class Meta:
+        model = Product
+        fields = ['product_name', 'description', 'image', 'category', 'purchase_price']
+
+
+class ProductModeratorForm(CreateProductForm):
+    """
+    Форма для редактирования товара модератором.
+
+    Модератор может изменять описание, категорию и статус публикации (is_published).
+    Включает проверку на запрещенные слова в описании.
+    """
+
+    class Meta:
+        model = Product
+        fields = ['description', 'category', 'is_published']
