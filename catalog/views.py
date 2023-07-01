@@ -8,7 +8,8 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from catalog.forms import PostForm, ContactForm, CreateProductForm, ProductVersionFormSet
-from catalog.models import Product, Post, Contact
+from catalog.models import Product, Post, Contact, Category
+from catalog.services import get_all_categories
 from permissions.user_permission import CreatorAccessMixin, ModeratorAccessMixin, ModeratorOrCreatorMixin
 
 
@@ -17,6 +18,21 @@ class ProductListView(ListView):
     extra_context = {
         'title': 'Главная'
     }
+
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """
+        Возвращает контекст данных для шаблона списка товаров,
+        включая категории и текущую выбранную категорию.
+        """
+        context = super().get_context_data(**kwargs)
+        category_id = self.request.GET.get('category')
+        context['categories'] = get_all_categories()
+        if category_id:
+            context['category'] = Category.get_category_by_id(category_id=category_id)
+        else:
+            context['category'] = 'Все'
+
+        return context
 
 
 class ProductDetailView(DetailView):

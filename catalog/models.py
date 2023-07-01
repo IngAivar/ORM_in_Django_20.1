@@ -20,6 +20,16 @@ class Category(models.Model):
         verbose_name_plural = 'категории'
         ordering = ('category',)
 
+    @classmethod
+    def get_all_categories(cls) -> models.QuerySet:
+
+        return cls.objects.all()
+
+    @classmethod
+    def get_category_by_id(cls, category_id: int) -> 'Category':
+
+        return cls.objects.get(id=category_id)
+
 
 class Product(models.Model):
     product_name = models.CharField(max_length=100, verbose_name='наименование продукта')
